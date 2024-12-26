@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Smart Agriculture Monitoring System </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+    <Style>
+        
+
+
+        
+        body{
+    background-image : url(https://media-hosting.imagekit.io//b1b793de9dcd47a9/happy%20day.png?Expires=1735370082&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=b7C1ahyMKlTnJS4omyiJRx7UAh3ys2qV6uWx0k4cEn5qjMKtkjQ4ZznWIbo0dZfy9QH~JF4ee4Y2tHDtc-9BsvAtps-c9N62BI3KBlVM1FiQn3isUwiIs0NOt2kTu0i4G2yj34NL0Rn9iGynNzCGDSh1Vf10i7mQ2W4Buuyu5YKCZKmZvhEQUgUwg4gLvZfFB-Ek6H-zm-n-NvfhvxefFwvk~IWtqDTK8G-svmmEa1G7f5KPF4b6-RzuYvV8QA7q~O1tIJ4r2TPu6-2K9AkKTYjzo3-9TRSkD1pBuxjEOyroSbqe9-CCr46TIOe76lpT9yImV4FEt-G-tFWzZj6Dyg__);
+    background-size: cover;
+    text-align: center;
+    font-family: "Pacifico", serif;
+
+}
+    .value{
+            margin: auto;
+            padding: 20px; 
+  width: 550px;
+  height: 370px;    
+  border-radius: 25px;
+            border: 3px solid #f8e7d0;
+            padding: 10px;
+            top: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            font-size: 120%;
+            background-color: #f8e7d0;
+            color: #fbaa00;
+            border-color: #42a739;
+           
+            
+            
+}
+    .title{
+        top: 70%;
+    }
+         
+    </Style>
+</head>
+<body>
+    <div class="value">
+        <h1 class="title">Smart Agriculture Project</h1>
+    <p>Temperature (DHT11): <span id="dhtTemp">0</span> °C</p>
+    <p>Humidity: <span id="humidity">0</span> %</p>
+    <p>Light Level: <span id="lightLevel">0</span></p>
+    <p>Temperature (DS18B20): <span id="dsTemp">0</span> °C</p>
+    <button style=" border-color: #42a739;  background-color: #fbaa00; color: #f8e7d0; width: 90px; height: 40px;    border-radius: 25px;" onclick="togglePump('on')">Turn ON Pump</button>
+    <button style=" border-color: #42a739;  background-color: #fbaa00; color: #f8e7d0; width: 90px; height: 40px;    border-radius: 25px;"onclick="togglePump('off')">Turn OFF Pump</button>
+</div>
+
+    <script>
+        function togglePump(action) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/pump/" + action, true);
+            xhr.send();
+        }
+        
+        setInterval(function() {
+            fetch('/data')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("dhtTemp").innerText = data.dhtTemp;
+                    document.getElementById("humidity").innerText = data.humidity;
+                    document.getElementById("lightLevel").innerText = data.lightLevel;
+                    document.getElementById("dsTemp").innerText = data.dsTemp;
+                });
+        }, 2000);
+    </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html>
